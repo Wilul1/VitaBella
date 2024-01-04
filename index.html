@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaBella</title>
+    <meta name="description" content="VitaBella - A Milk Tea/coffee shop with a variety of drinks in the Philippines.">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #000000;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+        }
+        section {
+            padding: 20px;
+        }
+        footer {
+            background-color: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>VitaBella</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#featured-teas">Featured Teas</a></li>
+            <li><a href="#order">Order</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <article id="about">
+        <h2>About VitaBella</h2>
+        <p>VitaBella is a Milk Tea/coffee shop, offering a variety of drinks with ingredients like glutathione, malunggay, and more. It is a franchise store with multiple branches in the Philippines.</p>
+    </article>
+
+    <article id="featured-teas">
+        <h2>Featured Teas</h2>
+        <ul>
+        <h2>Here is one of the best selling Milk Tea and Coffe in VitaBella</h1>
+        <h2>Iced Cafe Mocha</h2>
+        <figure>
+        <img src="img/cold-coffee-drink.jpg" alt="Iced Cofe Mocha" width="100" height="100"> 
+        <figcaption>An iced café mocha is a refreshing coffee beverage that combines espresso, chocolate syrup, and milk over ice, creating a deliciously chille.photo from Racool_Studio</figcaption>
+        </figure>
+        <h2>Cafe latte</h2>
+        <figure>
+        <img src="img/istockphoto-681751188-612x612.jpg" alt="Iced Cofe Latte" width="100" height="100">
+        <figcaption>A café latte is an espresso-based drink with steamed milk, creating a smooth and creamy coffee experience..</figcaption>
+        </figure>
+        <h2>Iced Coffee</h2>
+        <figure>
+        <img src="img/iced-coffee.jpg" alt="Iced Coffe" width="100" height="100>"
+        <figcaption>Iced coffee is a chilled coffee beverage served over ice, offering a refreshing and caffeinated option.</figcaption>
+        </figure>
+    </article>
+
+    <article id="order">
+        <h2>Place Your Order</h2>
+        <form action="/submit-order" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="tea-type">Select Tea:</label>
+            <select id="tea-type" name="tea-type">
+                <option value="Iced Cafe Mocha">Iced Cafe Mocha</option>
+                <option value="Cafe Latte">Cafe Latte</option>
+                <option value="Iced Coffee">Iced Coffee</option>
+                <option value="Choco Berry Ice">Choco Berry Ice</option>
+                <option value="Choco Matcha Berry">Choco Matcha Berry</option>
+                <option value="Choco Berry Latte">Choco Berry Latte</option>
+                <option value="HoneyDew">HoneyDew</option>
+                <option value="Green Apple">Green Apple</option>
+                <option value="Hokkaido">Hokkaido</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+
+            <button type="submit">Submit Order</button>
+        </form>
+        </form>
+    </article>
+
+    <article id="contact">
+        <h2>Contact Us</h2>
+        <p>Have questions or need assistance? Reach out to us:</p>
+        <p>Email: info@VitaBella.com</p>
+        <p>Phone: (555) 123-76543</p>
+    </article>
+
+    <footer>
+        <p>&copy; 2024 VitaBella</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); 
+
+                if (validateForm()) {
+                    submitOrder();
+                }
+            });
+
+            function validateForm() {
+                let isValid = true;
+
+                
+                const nameInput = form.elements.name;
+                if (nameInput.value.trim() === '') {
+                    alert('Please enter your name.');
+                    isValid = false;
+                }
+
+                
+                const emailInput = form.elements.email;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailInput.value.trim())) {
+                    alert('Please enter a valid email address.');
+                    isValid = false;
+                }
+
+                
+                const quantityInput = form.elements.quantity;
+                if (parseInt(quantityInput.value, 10) < 1) {
+                    alert('Please enter a valid quantity.');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            function submitOrder() {
+                const endpoint = '/submit-order';
+
+                fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: form.elements.name.value,
+                        email: form.elements.email.value,
+                        teaType: form.elements['tea-type'].value,
+                        quantity: form.elements.quantity.value,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(`Order placed successfully! Your order ID is: ${data.orderId}`);
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Order Placed! Enjoy your Drink.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
